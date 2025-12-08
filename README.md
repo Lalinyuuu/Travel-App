@@ -281,5 +281,5 @@ MIT License
 
 ## 👥 Contributors
 
-- [lalinyuuu]
+- lalinyuuu
 
