@@ -1,31 +1,32 @@
 package com.travelapp.service;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import javax.crypto.SecretKey;
+
+import org.springframework.stereotype.Service;
+
+import com.travelapp.config.JwtProperties;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+
 @Service
 public class JwtService {
 
-    @Value("${jwt.secret:your-secret-key-change-this-in-production-min-256-bits}")
-    private String secret;
+    private final JwtProperties jwtProperties;
 
-    @Value("${jwt.access-token-expiration:900000}")
-    private long accessTokenExpiration;
-
-    @Value("${jwt.refresh-token-expiration:604800000}")
-    private long refreshTokenExpiration;
+    public JwtService(JwtProperties jwtProperties) {
+        this.jwtProperties = jwtProperties;
+    }
 
     private SecretKey getSigningKey() {
+        String secret = jwtProperties.getSecret();
         if (secret == null || secret.isEmpty() || secret.equals("your-secret-key-change-this-in-production-min-256-bits")) {
             throw new IllegalStateException("JWT secret must be configured. Set JWT_SECRET environment variable.");
         }
@@ -37,13 +38,13 @@ public class JwtService {
     }
 
     public String generateAccessToken(Long userId, String email) {
-        return createToken(buildClaims(userId, email), userId.toString(), accessTokenExpiration);
+        return createToken(buildClaims(userId, email), userId.toString(), jwtProperties.getAccessTokenExpiration());
     }
 
     public String generateRefreshToken(Long userId, String email) {
         Map<String, Object> claims = buildClaims(userId, email);
         claims.put("type", "refresh");
-        return createToken(claims, userId.toString(), refreshTokenExpiration);
+        return createToken(claims, userId.toString(), jwtProperties.getRefreshTokenExpiration());
     }
     
     private Map<String, Object> buildClaims(Long userId, String email) {
