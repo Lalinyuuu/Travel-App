@@ -1,0 +1,12 @@
+target
+.git
+.gitignore
+README.md
+**/*.iml
+.idea
+.vscode
+node_modules
+.env
+frontend
+database
+

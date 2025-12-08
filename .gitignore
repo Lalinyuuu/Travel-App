@@ -1,0 +1,65 @@
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.DS_Store
+
+# Backend
+backend/target/
+backend/.mvn/wrapper/maven-wrapper.jar
+!backend/.mvn/wrapper/maven-wrapper.properties
+backend/.mvn/
+!backend/.mvn/wrapper/
+!backend/.mvn/wrapper/maven-wrapper.properties
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+
+# Logs
+*.log
+logs/
+
+# Environment files
+*.env
+!*.env.example
+**/application-local.properties
+!**/application-local.properties.example
+
+# Security: Never commit these
+**/application-local.properties
+*.local.properties
+*.secret
+*.key
+*.pem
+*.p12
+*.jks
+
+# Build outputs
+backend/target/
+frontend/dist/
+frontend/.vite/
+
+# Dependencies
+node_modules/
+# package-lock.json - Keep in git for dependency version locking (frontend only)
+backend/package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+

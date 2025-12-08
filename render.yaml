@@ -1,0 +1,40 @@
+services:
+  - type: web
+    name: travel-app-backend
+    # ใช้ Docker (แนะนำ) หรือ Java Native
+    # สำหรับ Docker: เปลี่ยน env เป็น "docker" และเพิ่ม dockerfilePath, dockerContext
+    # สำหรับ Java: ใช้ env: "java" และ buildCommand, startCommand
+    env: docker
+    plan: starter
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    # ถ้าใช้ Java Native แทน Docker ให้ uncomment บรรทัดด้านล่างและ comment dockerfilePath, dockerContext
+    # rootDir: backend
+    # buildCommand: ./mvnw clean package -DskipTests
+    # startCommand: java -jar -Dspring.profiles.active=production target/travel-app-*.jar
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: production
+      - key: PORT
+        value: 8080
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false
+      - key: JWT_ACCESS_TOKEN_EXPIRATION
+        value: 900000
+      - key: JWT_REFRESH_TOKEN_EXPIRATION
+        value: 604800000
+
+databases:
+  - name: travel-app-db
+    plan: starter
+    databaseName: travelapp
+    user: travelapp
+

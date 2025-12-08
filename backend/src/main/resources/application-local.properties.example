@@ -1,0 +1,18 @@
+# Local Database Configuration (Supabase)
+# Copy this file to application-local.properties and update with your Supabase credentials
+# 
+# To get your Supabase connection details:
+# 1. Go to Supabase Dashboard > Settings > Database
+# 2. Find "Connection string" section
+# 3. Copy the "URI" or "Connection pooling" URI
+# 4. Format: jdbc:postgresql://db.xxxxx.supabase.co:5432/postgres
+#
+# Example:
+# spring.datasource.url=jdbc:postgresql://db.abcdefghijklmnop.supabase.co:5432/postgres
+# spring.datasource.username=postgres
+# spring.datasource.password=your-actual-password-here
+
+spring.datasource.url=jdbc:postgresql://db.your-project.supabase.co:5432/postgres
+spring.datasource.username=postgres
+spring.datasource.password=your-password-here
+
