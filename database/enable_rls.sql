@@ -42,8 +42,3 @@ TO postgres
 USING (true)
 WITH CHECK (true);
 
--- Note: Since we're using Spring Boot backend with direct database connection
--- (not Supabase client), the backend uses the database connection string
--- which typically uses the 'postgres' role or a custom role with full access.
--- These policies ensure the backend can perform all operations while RLS is enabled.
-
