@@ -8,8 +8,9 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-        target: 'http://localhost:8080',
-        changeOrigin: true
+        target: 'https://travel-app-backend-lu5l.onrender.com',
+        changeOrigin: true,
+        secure: true
       }
     }
   }
