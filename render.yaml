@@ -28,6 +28,6 @@ services:
 
 databases:
   - name: travel-app-db
-    plan: starter
+    plan: free
     databaseName: travelapp
     user: travelapp
