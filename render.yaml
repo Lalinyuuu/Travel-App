@@ -6,7 +6,7 @@ services:
     # สำหรับ Java: ใช้ env: "java" และ buildCommand, startCommand
     env: docker
     plan: starter
-    dockerfilePath: ./Dockerfile
+    dockerfilePath: ./backend/Dockerfile
     dockerContext: .
     # ถ้าใช้ Java Native แทน Docker ให้ uncomment บรรทัดด้านล่างและ comment dockerfilePath, dockerContext
     # rootDir: backend
