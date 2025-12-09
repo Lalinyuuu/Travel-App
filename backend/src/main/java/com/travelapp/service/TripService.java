@@ -72,8 +72,9 @@ public class TripService {
         return TripMapper.toPageResponse(tripsPage, tripSummaries);
     }
 
+    @Transactional(readOnly = true)
     public TripResponse getTripById(@NonNull Long id) {
-        return tripRepository.findById(id)
+        return tripRepository.findByIdWithAuthor(id)
                 .map(TripMapper::toResponse)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Trip not found"));
     }

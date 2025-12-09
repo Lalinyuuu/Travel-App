@@ -67,7 +67,15 @@ public class TripMapper {
         response.setLatitude(trip.getLatitude());
         response.setLongitude(trip.getLongitude());
         response.setAuthorId(trip.getAuthorId());
-        response.setAuthorName(trip.getAuthor() != null ? trip.getAuthor().getDisplayName() : null);
+        
+        // Safely get author name, handle lazy loading exception
+        try {
+            response.setAuthorName(trip.getAuthor() != null ? trip.getAuthor().getDisplayName() : null);
+        } catch (Exception e) {
+            // If lazy loading fails, set to null
+            response.setAuthorName(null);
+        }
+        
         response.setCreatedAt(trip.getCreatedAt());
         response.setUpdatedAt(trip.getUpdatedAt());
         return response;
