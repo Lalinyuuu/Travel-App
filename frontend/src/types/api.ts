@@ -10,8 +10,10 @@ export interface PageResponse<T> {
 export interface ApiError extends Error {
   response?: {
     status: number
+    statusText?: string
     data?: {
       error?: string
+      message?: string
     }
   }
   code?: string

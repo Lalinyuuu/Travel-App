@@ -61,12 +61,15 @@ export function useTripDetail() {
           }
         }
       }
+      loading.value = false
     } catch (err) {
       const apiError = err as ApiError
-      if (apiError.response?.status === 403) {
+      if (apiError.response?.status === 404) {
+        error.value = t('trip.tripNotFound')
+      } else if (apiError.response?.status === 403) {
         error.value = t('trip.noPermission')
       } else {
-        error.value = t('trip.tripNotFound')
+        error.value = apiError.response?.data?.message || apiError.response?.data?.error || t('trip.tripNotFound')
       }
       loading.value = false
     }

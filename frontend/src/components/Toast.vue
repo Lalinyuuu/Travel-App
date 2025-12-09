@@ -7,19 +7,19 @@
           :key="toast.id"
           class="flex items-center gap-3 p-4 rounded-lg shadow-lg animate-[slideIn_0.3s_ease-out]"
           :class="{
-            'bg-green-2 dark:bg-gray-6 border-l-4 border-green-5 dark:border-green-3': toast.type === 'success',
-            'bg-red-2 dark:bg-gray-3 border-l-4 border-red-5 dark:border-red-3': toast.type === 'error',
-            'bg-yellow-2 dark:bg-gray-8 border-l-4 border-yellow-5 dark:border-yellow-3': toast.type === 'warning',
-            'bg-blue-2 dark:bg-gray-8 border-l-4 border-blue-5 dark:border-blue-3': toast.type === 'info',
+            'bg-green-1 dark:bg-green-2 border-l-4 border-green-4 dark:border-green-3': toast.type === 'success',
+            'bg-red-1 dark:bg-red-2 border-l-4 border-red-4 dark:border-red-3': toast.type === 'error',
+            'bg-yellow-1 dark:bg-yellow-2 border-l-4 border-yellow-4 dark:border-yellow-3': toast.type === 'warning',
+            'bg-blue-1 dark:bg-blue-2 border-l-4 border-blue-4 dark:border-blue-3': toast.type === 'info',
             'bg-white dark:bg-gray-9': toast.type !== 'error' && toast.type !== 'success' && toast.type !== 'warning' && toast.type !== 'info'
           }"
         >
           <div class="shrink-0 flex items-center justify-center"
             :class="{
-              'text-green-5 dark:text-green-3': toast.type === 'success',
-              'text-red-3 dark:text-red-3': toast.type === 'error',
-              'text-yellow-5 dark:text-yellow-3': toast.type === 'warning',
-              'text-blue-5 dark:text-blue-3': toast.type === 'info'
+              'text-green-4 dark:text-green-3': toast.type === 'success',
+              'text-red-4 dark:text-red-3': toast.type === 'error',
+              'text-yellow-4 dark:text-yellow-3': toast.type === 'warning',
+              'text-blue-4 dark:text-blue-3': toast.type === 'info'
             }"
           >
             <svg v-if="toast.type === 'success'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -44,10 +44,10 @@
           <div class="flex-1">
             <p class="m-0 text-sm leading-snug font-semibold"
               :class="{
-                'text-green-5 dark:text-green-3': toast.type === 'success',
-                'text-red-3 dark:text-red-3': toast.type === 'error',
-                'text-yellow-5 dark:text-yellow-3': toast.type === 'warning',
-                'text-blue-5 dark:text-blue-3': toast.type === 'info',
+                'text-green-5 dark:text-green-4': toast.type === 'success',
+                'text-red-5 dark:text-red-4': toast.type === 'error',
+                'text-yellow-5 dark:text-yellow-4': toast.type === 'warning',
+                'text-blue-5 dark:text-blue-4': toast.type === 'info',
                 'text-gray-7 dark:text-gray-2': !toast.type || (toast.type !== 'error' && toast.type !== 'success' && toast.type !== 'warning' && toast.type !== 'info')
               }"
             >{{ toast.message }}</p>

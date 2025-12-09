@@ -41,6 +41,15 @@ declare global {
         }
         LatLng: new (lat: number, lng: number) => google.maps.LatLng
         LatLngLiteral: { lat: number; lng: number }
+        Geocoder: new () => {
+          geocode: (
+            request: { location: { lat: number; lng: number } },
+            callback: (results: google.maps.GeocoderResult[] | null, status: string) => void
+          ) => void
+        }
+        GeocoderResult: {
+          formatted_address: string
+        }
         MapOptions: {
           center?: google.maps.LatLng | google.maps.LatLngLiteral
           zoom?: number
@@ -266,6 +275,33 @@ export function useLocationSearch(formData: Ref<FormData>) {
     }
   })
 
+  const reverseGeocode = (lat: number, lng: number): void => {
+    if (typeof window === 'undefined' || !window.google?.maps) {
+      // Fallback to coordinates if Google Maps is not loaded
+      locationSearch.value = `${lat.toFixed(6)}, ${lng.toFixed(6)}`
+      return
+    }
+
+    try {
+      const geocoder = new window.google.maps.Geocoder()
+      geocoder.geocode(
+        { location: { lat, lng } },
+        (results: google.maps.GeocoderResult[] | null, status: string) => {
+          if (status === 'OK' && results && results.length > 0) {
+            // Use the first result (most specific)
+            locationSearch.value = results[0].formatted_address || `${lat.toFixed(6)}, ${lng.toFixed(6)}`
+          } else {
+            // Fallback to coordinates if geocoding fails
+            locationSearch.value = `${lat.toFixed(6)}, ${lng.toFixed(6)}`
+          }
+        }
+      )
+    } catch (error) {
+      // Fallback to coordinates on error
+      locationSearch.value = `${lat.toFixed(6)}, ${lng.toFixed(6)}`
+    }
+  }
+
   const reset = (): void => {
     locationSearch.value = ''
     locationSearchResults.value = []
@@ -289,6 +325,7 @@ export function useLocationSearch(formData: Ref<FormData>) {
     selectLocation,
     clearLocation,
     reset,
-    initMapPicker
+    initMapPicker,
+    reverseGeocode
   }
 }
