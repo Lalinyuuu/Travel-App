@@ -153,7 +153,8 @@ const {
   selectLocation,
   clearLocation,
   reset: resetLocation,
-  initMapPicker
+  initMapPicker,
+  reverseGeocode
 } = useLocationSearch(formData)
 
 const photosText = computed({
@@ -181,7 +182,10 @@ watch(() => props.initialData, (newData) => {
       longitude: newData.longitude || null
     }
     if (newData.latitude && newData.longitude) {
-      locationSearch.value = `${newData.latitude.toFixed(6)}, ${newData.longitude.toFixed(6)}`
+      // Use reverse geocoding to get location name
+      nextTick(() => {
+        reverseGeocode(newData.latitude, newData.longitude)
+      })
     } else {
       locationSearch.value = ''
     }
