@@ -16,9 +16,9 @@
       </div>
     </div>
     <div class="p-6 md:p-4 sm:p-3.5">
-      <h3 class="text-xl md:text-lg font-semibold text-(--color-text) m-0 mb-2 transition-colors duration-300">{{ trip.title }}</h3>
+      <h3 class="text-xl md:text-lg font-semibold text-(--color-text) m-0 mb-2 transition-colors duration-300">{{ translatedTitle }}</h3>
       <p v-if="trip.province" class="text-sm text-primary mb-2 transition-colors duration-300">{{ translateTag(trip.province) }}</p>
-      <p class="text-sm text-(--color-text-secondary) mb-2 line-clamp-2 transition-colors duration-300">{{ trip.shortDescription || '' }}</p>
+      <p class="text-sm text-(--color-text-secondary) mb-2 line-clamp-2 transition-colors duration-300">{{ translatedShortDescription }}</p>
       <p v-if="trip.updatedAt" class="text-xs text-(--color-text-secondary) mb-4 transition-colors duration-300">{{ $t('landing.updated') }}: {{ formatDate(trip.updatedAt) }}</p>
       <div class="flex gap-2 flex-wrap md:flex-col">
         <router-link :to="`/trips/${trip.id}`" class="btn btn-outline px-3 py-1.5 text-sm md:w-full">
@@ -48,6 +48,7 @@ import { computed } from 'vue'
 import { authService } from '../../services/auth'
 import { useDateFormat } from '../../composables/useDateFormat'
 import { useTagTranslation } from '../../composables/useTagTranslation'
+import { useTripTranslation } from '../../composables/useTripTranslation'
 
 const props = defineProps({
   trip: {
@@ -60,6 +61,10 @@ defineEmits(['edit', 'delete'])
 
 const { formatDate } = useDateFormat()
 const { translateTag } = useTagTranslation()
+const { getTranslatedTitle, getTranslatedShortDescription } = useTripTranslation()
+
+const translatedTitle = computed(() => getTranslatedTitle(props.trip))
+const translatedShortDescription = computed(() => getTranslatedShortDescription(props.trip))
 
 const isOwner = computed(() => {
   const currentUser = authService.getCurrentUser()

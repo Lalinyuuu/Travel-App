@@ -1,13 +1,26 @@
 package com.travelapp.entity;
 
-import jakarta.persistence.*;
-import lombok.Data;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
+import lombok.Data;
 
 @Entity
 @Table(name = "trips")
@@ -18,10 +31,15 @@ public class Trip {
     private Long id;
 
     @Column(nullable = false, columnDefinition = "TEXT")
-    private String title;
+    private String title; // Keep for backward compatibility, will use translations if available
 
     @Column(columnDefinition = "TEXT")
-    private String description;
+    private String description; // Keep for backward compatibility, will use translations if available
+
+    // Translations column - stores multilingual content as JSONB
+    @Column(name = "translations", columnDefinition = "JSONB")
+    @JdbcTypeCode(SqlTypes.JSON)
+    private Map<String, Map<String, String>> translations;
 
     @Column(name = "photos", columnDefinition = "TEXT[]")
     @JdbcTypeCode(SqlTypes.ARRAY)

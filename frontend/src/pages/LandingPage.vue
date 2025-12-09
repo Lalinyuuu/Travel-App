@@ -61,7 +61,7 @@
                 <img
                   v-if="trip.coverImage"
                   :src="trip.coverImage"
-                  :alt="trip.title"
+                  :alt="getTranslatedTitle(trip)"
                   class="w-full h-full object-cover block transition-opacity duration-300"
                   loading="lazy"
                   decoding="async"
@@ -77,13 +77,13 @@
               </div>
                 <div class="p-6 flex-1 flex flex-col min-w-0 bg-(--color-card-bg) shrink-0">
                 <div class="flex justify-between items-start mb-3 gap-4">
-                  <h3 class="text-xl font-semibold text-(--color-text) m-0 flex-1 line-clamp-2 leading-tight">{{ trip.title }}</h3>
+                  <h3 class="text-xl font-semibold text-(--color-text) m-0 flex-1 line-clamp-2 leading-tight">{{ getTranslatedTitle(trip) }}</h3>
                   <span v-if="trip.province" class="text-sm text-white bg-(--color-province-tag) px-3 py-1 rounded-xl whitespace-nowrap shrink-0 font-medium transition-colors duration-300">{{ translateTag(trip.province) }}</span>
                 </div>
                 <p v-if="trip.updatedAt || trip.updated_at || trip.createdAt || trip.created_at" class="text-xs text-gray-4 my-2">
                   {{ $t('landing.updated') }}: {{ formatDate(trip.updatedAt || trip.updated_at || trip.createdAt || trip.created_at) }}
                 </p>
-                <p class="text-sm text-(--color-text-secondary) mb-4 line-clamp-3 flex-1 min-h-18 leading-relaxed">{{ trip.shortDescription }}</p>
+                <p class="text-sm text-(--color-text-secondary) mb-4 line-clamp-3 flex-1 min-h-18 leading-relaxed">{{ getTranslatedShortDescription(trip) }}</p>
                 <div class="mt-auto flex flex-col gap-4 shrink-0">
                   <div class="h-[120px] overflow-y-auto" v-if="trip.tags && trip.tags.length > 0">
                     <div class="flex flex-wrap items-start gap-2">
@@ -146,10 +146,12 @@ import ServiceCards from '../components/ServiceCards.vue'
 import { useLanding } from '../composables/useLanding'
 import { useDateFormat } from '../composables/useDateFormat'
 import { useTagTranslation } from '../composables/useTagTranslation'
+import { useTripTranslation } from '../composables/useTripTranslation'
 
 const { t } = useI18n()
 const { formatDate } = useDateFormat()
 const { translateTag } = useTagTranslation()
+const { getTranslatedTitle, getTranslatedShortDescription } = useTripTranslation()
 
 const {
   trips,

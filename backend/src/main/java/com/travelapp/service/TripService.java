@@ -1,5 +1,17 @@
 package com.travelapp.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+
 import com.travelapp.dto.CreateTripRequest;
 import com.travelapp.dto.PageResponse;
 import com.travelapp.dto.TripResponse;
@@ -10,27 +22,18 @@ import com.travelapp.repository.TripRepository;
 import com.travelapp.repository.UserRepository;
 import com.travelapp.security.UserPrincipal;
 import com.travelapp.util.TripMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class TripService {
 
     private final TripRepository tripRepository;
     private final UserRepository userRepository;
+    private final TranslationService translationService;
 
-    public TripService(TripRepository tripRepository, UserRepository userRepository) {
+    public TripService(TripRepository tripRepository, UserRepository userRepository, TranslationService translationService) {
         this.tripRepository = tripRepository;
         this.userRepository = userRepository;
+        this.translationService = translationService;
     }
 
     public PageResponse<TripSummaryResponse> getAllTrips(int page, int size, String query) {
@@ -86,6 +89,15 @@ public class TripService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
         Trip trip = TripMapper.toEntity(request);
+        
+        // Generate translations if not provided
+        if (trip.getTranslations() == null || trip.getTranslations().isEmpty()) {
+            trip.setTranslations(translationService.createTranslations(
+                request.getTitle(),
+                request.getDescription() != null ? request.getDescription() : ""
+            ));
+        }
+        
         trip.setAuthor(author);
         Trip savedTrip = tripRepository.save(trip);
         
@@ -107,6 +119,15 @@ public class TripService {
         }
 
         TripMapper.updateEntity(trip, request);
+        
+        // Update translations if not provided in request
+        if (trip.getTranslations() == null || trip.getTranslations().isEmpty()) {
+            trip.setTranslations(translationService.createTranslations(
+                request.getTitle(),
+                request.getDescription() != null ? request.getDescription() : ""
+            ));
+        }
+        
         Trip updatedTrip = tripRepository.save(trip);
         
         return TripMapper.toResponse(updatedTrip);

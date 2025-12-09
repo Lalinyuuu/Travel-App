@@ -26,7 +26,7 @@
 
           <TripImageGallery
             :photos="trip.photos"
-            :title="trip.title"
+            :title="translatedTitle"
             v-model:current-index="currentImageIndex"
           />
 
@@ -41,12 +41,12 @@
 
             <TripTags :tags="trip.tags" />
 
-            <TripDescription :description="trip.description" />
+            <TripDescription :trip="trip" :description="trip.description" />
 
             <TripMap
               :latitude="trip.latitude"
               :longitude="trip.longitude"
-              :title="trip.title"
+              :title="translatedTitle"
             />
           </div>
         </div>
@@ -75,7 +75,7 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import NavBar from '../components/NavBar.vue'
 import TripFormModal from '../components/dashboard/TripFormModal.vue'
 import DeleteConfirmModal from '../components/dashboard/DeleteConfirmModal.vue'
@@ -86,6 +86,7 @@ import TripTags from '../components/trip-detail/TripTags.vue'
 import TripDescription from '../components/trip-detail/TripDescription.vue'
 import TripActions from '../components/trip-detail/TripActions.vue'
 import { useTripDetail } from '../composables/useTripDetail'
+import { useTripTranslation } from '../composables/useTripTranslation'
 
 const {
   trip,
@@ -106,6 +107,9 @@ const {
   handleUpdate,
   closeEditModal
 } = useTripDetail()
+
+const { getTranslatedTitle } = useTripTranslation()
+const translatedTitle = computed(() => trip.value ? getTranslatedTitle(trip.value) : '')
 
 onMounted(() => {
   fetchTrip()
