@@ -1,13 +1,14 @@
 package com.travelapp.util;
 
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+
 import com.travelapp.dto.CreateTripRequest;
 import com.travelapp.dto.PageResponse;
 import com.travelapp.dto.TripResponse;
 import com.travelapp.dto.TripSummaryResponse;
 import com.travelapp.entity.Trip;
-import org.springframework.data.domain.Page;
-
-import java.util.List;
 
 public class TripMapper {
     
@@ -22,6 +23,12 @@ public class TripMapper {
         Trip trip = new Trip();
         trip.setTitle(request.getTitle());
         trip.setDescription(request.getDescription());
+        
+        // Set translations if provided, otherwise will be set by service
+        if (request.getTranslations() != null && !request.getTranslations().isEmpty()) {
+            trip.setTranslations(request.getTranslations());
+        }
+        
         trip.setPhotos(request.getPhotos() != null ? request.getPhotos() : List.of());
         trip.setTags(request.getTags() != null ? request.getTags() : List.of());
         trip.setLatitude(request.getLatitude());
@@ -32,6 +39,12 @@ public class TripMapper {
     public static void updateEntity(Trip trip, CreateTripRequest request) {
         trip.setTitle(request.getTitle());
         trip.setDescription(request.getDescription());
+        
+        // Update translations if provided
+        if (request.getTranslations() != null && !request.getTranslations().isEmpty()) {
+            trip.setTranslations(request.getTranslations());
+        }
+        
         trip.setPhotos(request.getPhotos() != null ? request.getPhotos() : List.of());
         trip.setTags(request.getTags() != null ? request.getTags() : List.of());
         trip.setLatitude(request.getLatitude());
@@ -43,6 +56,12 @@ public class TripMapper {
         response.setId(trip.getId());
         response.setTitle(trip.getTitle());
         response.setDescription(trip.getDescription());
+        
+        // Include translations if available
+        if (trip.getTranslations() != null && !trip.getTranslations().isEmpty()) {
+            response.setTranslations(trip.getTranslations());
+        }
+        
         response.setPhotos(trip.getPhotos());
         response.setTags(trip.getTags());
         response.setLatitude(trip.getLatitude());
@@ -59,6 +78,12 @@ public class TripMapper {
         summary.setId(trip.getId());
         summary.setTitle(trip.getTitle());
         summary.setShortDescription(truncateDescription(trip.getDescription()));
+        
+        // Include translations if available
+        if (trip.getTranslations() != null && !trip.getTranslations().isEmpty()) {
+            summary.setTranslations(trip.getTranslations());
+        }
+        
         summary.setCoverImage(getCoverImage(trip.getPhotos()));
         summary.setProvince(extractProvince(trip.getTags()));
         summary.setTags(trip.getTags());

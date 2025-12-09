@@ -62,13 +62,12 @@ export function useTripDetail() {
         }
       }
     } catch (err) {
-      const error = err as ApiError
-      if (error.response?.status === 403) {
+      const apiError = err as ApiError
+      if (apiError.response?.status === 403) {
         error.value = t('trip.noPermission')
       } else {
         error.value = t('trip.tripNotFound')
       }
-    } finally {
       loading.value = false
     }
   }

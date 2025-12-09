@@ -1,8 +1,20 @@
 // Trip-related types based on backend DTOs
+export interface Translations {
+  th?: {
+    title?: string
+    description?: string
+  }
+  en?: {
+    title?: string
+    description?: string
+  }
+}
+
 export interface Trip {
   id: number
   title: string
   description?: string
+  translations?: Translations
   photos: string[]
   tags: string[]
   latitude?: number | null
@@ -18,6 +30,7 @@ export interface TripSummary {
   id: number
   title: string
   shortDescription?: string
+  translations?: Translations
   coverImage?: string
   province?: string
   tags: string[]

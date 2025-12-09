@@ -1,19 +1,23 @@
 package com.travelapp.dto;
 
+import java.util.List;
+import java.util.Map;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 public class CreateTripRequest {
     @NotBlank(message = "Title is required")
-    private String title;
+    private String title; // Thai title (default)
 
-    private String description;
+    private String description; // Thai description (default)
+
+    // Translations map: {"th": {"title": "...", "description": "..."}, "en": {"title": "...", "description": "..."}}
+    private Map<String, Map<String, String>> translations;
 
     @NotNull(message = "Photos are required")
     private List<String> photos;
