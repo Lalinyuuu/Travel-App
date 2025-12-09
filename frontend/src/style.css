@@ -46,6 +46,7 @@
   --color-gray-7: #4b5563;
   --color-gray-8: #374151;
   --color-gray-9: #1f2937;
+  --color-timestamp: #6b7280;
   
   /* Brown colors (pastel brown palette) */
   --color-brown-1: #F2D1BE;
@@ -75,6 +76,7 @@
   --color-input-bg: #FFF9E8;
   --color-text: #333;
   --color-text-secondary: #475569;
+  --color-service-text: #24496b;
   --color-navbar-bg: #ffffff;
   --color-card-bg: #ffffff;
   --color-border: rgba(0, 0, 0, 0.1);
@@ -118,6 +120,7 @@
   --color-gray-7: #4b5563;
   --color-gray-8: #374151;
   --color-gray-9: #1f2937;
+  --color-timestamp: #6b7280;
   
   /* Brown colors (pastel brown palette) */
   --color-brown-1: #F2D1BE;
@@ -145,6 +148,7 @@
   --color-input-bg: #35688a;
   --color-text: #f7fafe;
   --color-text-secondary: #98b1c8;
+  --color-service-text: #FEEFC6;
   --color-navbar-bg: #071f35;
   --color-card-bg: #24496b;
   --color-border: rgba(152, 177, 200, 0.2);
@@ -188,6 +192,7 @@
   --color-gray-7: #e5e7eb;
   --color-gray-8: #f3f4f6;
   --color-gray-9: #f9fafb;
+  --color-timestamp: #E8D5B7;
   
   /* Brown colors (pastel brown palette) - adjusted for dark mode */
   --color-brown-1: #836953;
