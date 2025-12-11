@@ -70,7 +70,7 @@ public class TripMapper {
         
         // Safely get author name, handle lazy loading exception
         try {
-            response.setAuthorName(trip.getAuthor() != null ? trip.getAuthor().getDisplayName() : null);
+        response.setAuthorName(trip.getAuthor() != null ? trip.getAuthor().getDisplayName() : null);
         } catch (Exception e) {
             // If lazy loading fails, set to null
             response.setAuthorName(null);

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,7 @@ public class TripService {
             size = 12;
         }
         
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "updatedAt"));
         Page<Trip> tripsPage = (query != null && !query.trim().isEmpty())
                 ? tripRepository.searchByKeyword(query.trim(), pageable)
                 : tripRepository.findAll(pageable);
@@ -62,7 +63,7 @@ public class TripService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Please log in to view your trips");
         }
 
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "updatedAt"));
         Page<Trip> tripsPage = tripRepository.findByAuthorId(userId, pageable);
         
         List<TripSummaryResponse> tripSummaries = tripsPage.getContent().stream()

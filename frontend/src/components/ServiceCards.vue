@@ -12,8 +12,8 @@
         >
           <component :is="service.icon" />
         </div>
-        <h3 class="text-xl font-bold text-primary m-0 mb-3 transition-colors duration-300">{{ service.title }}</h3>
-        <p class="text-[0.95rem] text-(--color-text-secondary) leading-relaxed m-0 transition-colors duration-300">{{ service.description }}</p>
+        <h3 class="text-xl font-bold text-(--color-service-text) m-0 mb-3 transition-colors duration-300">{{ service.title }}</h3>
+        <p class="text-[0.95rem] text-(--color-service-text) leading-relaxed m-0 transition-colors duration-300">{{ service.description }}</p>
       </div>
     </div>
   </section>

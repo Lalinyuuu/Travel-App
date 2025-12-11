@@ -22,12 +22,12 @@
       </div>
     </div>
     <div class="p-6 flex-1 flex flex-col min-w-0 bg-(--color-card-bg) shrink-0">
-      <div class="flex justify-between items-start mb-3 gap-4">
+      <div class="flex justify-between items-start mb-3 gap-6">
         <h3 class="text-xl font-semibold text-(--color-text) m-0 flex-1 line-clamp-2 leading-tight">{{ translatedTitle }}</h3>
         <span v-if="trip.province" class="text-sm text-white bg-province-tag px-3 py-1 rounded-xl whitespace-nowrap shrink-0 font-medium transition-colors duration-300">{{ translateTag(trip.province) }}</span>
       </div>
-      <p v-if="trip.updatedAt || trip.updated_at || trip.createdAt || trip.created_at" class="text-xs text-gray-4 my-2">
-        {{ $t('allTrips.updated') }}: {{ formatDate(trip.updatedAt || trip.updated_at || trip.createdAt || trip.created_at) }}
+      <p v-if="trip.updatedAt || trip.updated_at || trip.createdAt || trip.created_at" class="text-xs my-2 transition-colors duration-300" style="color: var(--color-timestamp);">
+        {{ $t('allTrips.updated') }}: {{ formatDateFull(trip.updatedAt || trip.updated_at || trip.createdAt || trip.created_at) }}
       </p>
       <p class="text-sm text-(--color-text-secondary) mb-4 line-clamp-3 flex-1 min-h-18 leading-relaxed">{{ translatedShortDescription }}</p>
       <div class="mt-auto flex flex-col gap-4 shrink-0">
@@ -103,10 +103,6 @@ const isOwner = computed(() => {
   }
   return currentUser.id === props.trip.authorId
 })
-
-const formatDate = (dateString) => {
-  return formatDateFull(dateString)
-}
 
 const handleImageError = (event) => {
   event.target.style.display = 'none'
