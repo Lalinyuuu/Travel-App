@@ -13,17 +13,15 @@ import com.travelapp.entity.Trip;
 public interface TripRepository extends JpaRepository<Trip, Long> {
     @Query("SELECT t FROM Trip t WHERE t.authorId = :authorId")
     Page<Trip> findByAuthorId(@Param("authorId") Long authorId, Pageable pageable);
-    
+
     @Query("SELECT t FROM Trip t LEFT JOIN FETCH t.author WHERE t.id = :id")
     java.util.Optional<Trip> findByIdWithAuthor(@Param("id") Long id);
-    
+
     @Query(value = "SELECT * FROM trips WHERE " +
-           "LOWER(title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-           "EXISTS (SELECT 1 FROM unnest(tags) AS tag WHERE LOWER(tag::text) LIKE LOWER(CONCAT('%', :keyword, '%')))",
-           nativeQuery = true,
-           countQuery = "SELECT COUNT(*) FROM trips WHERE " +
-           "LOWER(title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-           "EXISTS (SELECT 1 FROM unnest(tags) AS tag WHERE LOWER(tag::text) LIKE LOWER(CONCAT('%', :keyword, '%')))")
+            "LOWER(title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "array_to_string(tags, ',') ILIKE CONCAT('%', :keyword, '%')", nativeQuery = true, countQuery = "SELECT COUNT(*) FROM trips WHERE "
+                    +
+                    "LOWER(title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+                    "array_to_string(tags, ',') ILIKE CONCAT('%', :keyword, '%')")
     Page<Trip> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);
 }
-

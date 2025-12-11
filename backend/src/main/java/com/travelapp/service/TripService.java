@@ -31,7 +31,8 @@ public class TripService {
     private final UserRepository userRepository;
     private final TranslationService translationService;
 
-    public TripService(TripRepository tripRepository, UserRepository userRepository, TranslationService translationService) {
+    public TripService(TripRepository tripRepository, UserRepository userRepository,
+            TranslationService translationService) {
         this.tripRepository = tripRepository;
         this.userRepository = userRepository;
         this.translationService = translationService;
@@ -44,16 +45,22 @@ public class TripService {
         if (size < 1 || size > 100) {
             size = 12;
         }
-        
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "updatedAt"));
-        Page<Trip> tripsPage = (query != null && !query.trim().isEmpty())
-                ? tripRepository.searchByKeyword(query.trim(), pageable)
-                : tripRepository.findAll(pageable);
-        
+
+        Page<Trip> tripsPage;
+        if (query != null && !query.trim().isEmpty()) {
+            // For native query search, use DB column name "updated_at"
+            Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "updated_at"));
+            tripsPage = tripRepository.searchByKeyword(query.trim(), pageable);
+        } else {
+            // For standard JPA query, use Entity property name "updatedAt"
+            Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "updatedAt"));
+            tripsPage = tripRepository.findAll(pageable);
+        }
+
         List<TripSummaryResponse> tripSummaries = tripsPage.getContent().stream()
                 .map(TripMapper::toSummary)
                 .collect(Collectors.toList());
-        
+
         return TripMapper.toPageResponse(tripsPage, tripSummaries);
     }
 
@@ -65,11 +72,11 @@ public class TripService {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "updatedAt"));
         Page<Trip> tripsPage = tripRepository.findByAuthorId(userId, pageable);
-        
+
         List<TripSummaryResponse> tripSummaries = tripsPage.getContent().stream()
                 .map(TripMapper::toSummary)
                 .collect(Collectors.toList());
-        
+
         return TripMapper.toPageResponse(tripsPage, tripSummaries);
     }
 
@@ -91,18 +98,17 @@ public class TripService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
         Trip trip = TripMapper.toEntity(request);
-        
+
         // Generate translations if not provided
         if (trip.getTranslations() == null || trip.getTranslations().isEmpty()) {
             trip.setTranslations(translationService.createTranslations(
-                request.getTitle(),
-                request.getDescription() != null ? request.getDescription() : ""
-            ));
+                    request.getTitle(),
+                    request.getDescription() != null ? request.getDescription() : ""));
         }
-        
+
         trip.setAuthor(author);
         Trip savedTrip = tripRepository.save(trip);
-        
+
         return TripMapper.toResponse(savedTrip);
     }
 
@@ -121,17 +127,16 @@ public class TripService {
         }
 
         TripMapper.updateEntity(trip, request);
-        
+
         // Update translations if not provided in request
         if (trip.getTranslations() == null || trip.getTranslations().isEmpty()) {
             trip.setTranslations(translationService.createTranslations(
-                request.getTitle(),
-                request.getDescription() != null ? request.getDescription() : ""
-            ));
+                    request.getTitle(),
+                    request.getDescription() != null ? request.getDescription() : ""));
         }
-        
+
         Trip updatedTrip = tripRepository.save(trip);
-        
+
         return TripMapper.toResponse(updatedTrip);
     }
 
@@ -156,4 +161,3 @@ public class TripService {
         return UserPrincipal.getCurrentUserId();
     }
 }
-
