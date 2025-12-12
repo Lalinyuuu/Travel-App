@@ -31,6 +31,7 @@ public class CorsConfig {
         config.addAllowedHeader("Authorization");
         config.addAllowedHeader("Content-Type");
         config.addAllowedHeader("X-Requested-With");
+        config.addAllowedHeader("X-CSRF-TOKEN"); // CSRF token header
         config.addAllowedHeader("Accept");
         config.addAllowedHeader("Origin");
         
@@ -45,6 +46,7 @@ public class CorsConfig {
         
         // Expose only necessary headers
         config.addExposedHeader("Authorization");
+        config.addExposedHeader("X-CSRF-TOKEN"); // Expose CSRF token for frontend
         
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
