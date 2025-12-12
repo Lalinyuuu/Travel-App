@@ -27,9 +27,13 @@ public class CsrfConfig {
     @Bean
     public CsrfTokenRepository csrfTokenRepository() {
         CookieCsrfTokenRepository repository = CookieCsrfTokenRepository.withHttpOnlyFalse();
-        repository.setCookieHttpOnly(true);
-        repository.setCookieSecure(true); // Only send over HTTPS in production
-        repository.setCookiePath("/");
+        // Use setCookieCustomizer for Spring Security 6.1+ (replaces deprecated methods)
+        repository.setCookieCustomizer(cookie -> {
+            cookie.httpOnly(true);
+            cookie.secure(true); // Only send over HTTPS in production
+            cookie.path("/");
+            cookie.sameSite("Strict");
+        });
         repository.setHeaderName("X-CSRF-TOKEN");
         repository.setCookieName("XSRF-TOKEN");
         return repository;

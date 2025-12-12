@@ -1,5 +1,53 @@
-{"properties": [{
-  "name": "jwt.secret",
-  "type": "java.lang.String",
-  "description": "A description for 'jwt.secret'"
-}]}
+{"properties": [
+  {
+    "name": "jwt.secret",
+    "type": "java.lang.String",
+    "sourceType": "com.travelapp.config.JwtProperties",
+    "description": "JWT secret key for signing tokens. Must be at least 32 characters long. Set via JWT_SECRET environment variable."
+  },
+  {
+    "name": "jwt.access-token-expiration",
+    "type": "java.lang.Long",
+    "sourceType": "com.travelapp.config.JwtProperties",
+    "defaultValue": 900000,
+    "description": "Access token expiration time in milliseconds. Default: 900000 (15 minutes). Set via JWT_ACCESS_TOKEN_EXPIRATION environment variable."
+  },
+  {
+    "name": "jwt.refresh-token-expiration",
+    "type": "java.lang.Long",
+    "sourceType": "com.travelapp.config.JwtProperties",
+    "defaultValue": 604800000,
+    "description": "Refresh token expiration time in milliseconds. Default: 604800000 (7 days). Set via JWT_REFRESH_TOKEN_EXPIRATION environment variable."
+  },
+  {
+    "name": "cors.allowed-origins",
+    "type": "java.lang.String",
+    "sourceType": "com.travelapp.config.CorsProperties",
+    "defaultValue": "http://localhost:5173,http://localhost:3000",
+    "description": "Comma-separated list of allowed CORS origins. Set via CORS_ALLOWED_ORIGINS environment variable."
+  },
+  {
+    "name": "supabase.url",
+    "type": "java.lang.String",
+    "sourceType": "com.travelapp.config.SupabaseProperties",
+    "description": "Supabase project URL. Set via SUPABASE_URL environment variable."
+  },
+  {
+    "name": "supabase.apiKey",
+    "type": "java.lang.String",
+    "sourceType": "com.travelapp.config.SupabaseProperties",
+    "description": "Supabase API key. Set via SUPABASE_API_KEY environment variable."
+  },
+  {
+    "name": "google.translate.api.key",
+    "type": "java.lang.String",
+    "defaultValue": "",
+    "description": "Google Cloud Translation API key. Get from https://console.cloud.google.com/apis/credentials. Set via GOOGLE_TRANSLATE_API_KEY environment variable."
+  },
+  {
+    "name": "google.translate.api.url",
+    "type": "java.lang.String",
+    "defaultValue": "https://translation.googleapis.com/language/translate/v2",
+    "description": "Google Cloud Translation API base URL. Default: https://translation.googleapis.com/language/translate/v2. Set via GOOGLE_TRANSLATE_API_URL environment variable."
+  }
+]}
