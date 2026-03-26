@@ -1,6 +1,7 @@
 package com.travelapp.util;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.data.domain.Page;
 
@@ -130,6 +131,9 @@ public class TripMapper {
         }
         
         for (String tag : tags) {
+            if (tag == null) {
+                continue;
+            }
             for (String province : PROVINCES) {
                 if (tag.contains(province)) {
                     return province;
@@ -137,7 +141,8 @@ public class TripMapper {
             }
         }
         
-        return tags.get(0);
+        // Prefer the first non-null tag; otherwise return empty string
+        return tags.stream().filter(Objects::nonNull).findFirst().orElse("");
     }
 }
 
