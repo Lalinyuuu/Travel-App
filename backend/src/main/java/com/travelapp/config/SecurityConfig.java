@@ -1,4 +1,4 @@
-                   package com.travelapp.config;
+package com.travelapp.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +15,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestHandler;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.http.HttpMethod;
 
 import com.travelapp.security.JwtAuthenticationFilter;
 
@@ -45,10 +47,10 @@ public class SecurityConfig {
                 .csrfTokenRequestHandler(csrfTokenRequestHandler)
                 // Allow GET requests without CSRF token (safe operations)
                 .ignoringRequestMatchers(
-                    "/api/auth/**",  // Auth endpoints don't need CSRF
-                    "GET", "/api/trips",  // Public read operations
-                    "GET", "/api/trips/**",
-                    "/api/admin/translations/**"  // Translation endpoint
+                    new AntPathRequestMatcher("/api/auth/**"),
+                    // Only ignore CSRF for safe read operations
+                    new AntPathRequestMatcher("/api/trips", HttpMethod.GET.name()),
+                    new AntPathRequestMatcher("/api/trips/**", HttpMethod.GET.name())
                 )
             )
             .cors(cors -> {})
@@ -67,11 +69,11 @@ public class SecurityConfig {
             )
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("GET", "/api/trips").permitAll()
-                .requestMatchers("GET", "/api/trips/{id}").permitAll()
-                .requestMatchers("POST", "/api/trips").authenticated()
-                .requestMatchers("PUT", "/api/trips/**").authenticated()
-                .requestMatchers("DELETE", "/api/trips/**").authenticated()
+                .requestMatchers(HttpMethod.GET, "/api/trips").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/trips/{id}").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/trips").authenticated()
+                .requestMatchers(HttpMethod.PUT, "/api/trips/**").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/api/trips/**").authenticated()
                 .requestMatchers("/api/trips/mine").authenticated()
                 .requestMatchers("/api/admin/translations/**").permitAll() // Allow translation endpoint
                 .anyRequest().permitAll()
