@@ -34,6 +34,14 @@ public class TranslationService {
     }
 
     /**
+     * Whether Google Translate external calls are allowed.
+     * When key is missing, the app should avoid hitting Google APIs and only fall back to Thai/original text.
+     */
+    public boolean isGoogleTranslateConfigured() {
+        return apiKey != null && !apiKey.isEmpty();
+    }
+
+    /**
      * Translate text from Thai to English using Google Translate API
      */
     public String translateToEnglish(String text) {

@@ -78,6 +78,7 @@ export function useLocationSearch(formData: Ref<FormData>) {
   let placesService: any = null
   let autocompleteService: any = null
   let searchTimeout: ReturnType<typeof setTimeout> | null = null
+  const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined
 
   const handleLocationSearch = (): void => {
     if (searchTimeout) {
@@ -85,6 +86,13 @@ export function useLocationSearch(formData: Ref<FormData>) {
     }
 
     if (!locationSearch.value.trim()) {
+      locationSearchResults.value = []
+      return
+    }
+
+    // If Google Maps API key is not configured, we should not keep retrying forever.
+    // main.ts will also skip loading the Google script when the key is missing.
+    if (!googleMapsApiKey) {
       locationSearchResults.value = []
       return
     }

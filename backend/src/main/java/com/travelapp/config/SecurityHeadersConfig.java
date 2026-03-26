@@ -43,7 +43,9 @@ public class SecurityHeadersConfig extends OncePerRequestFilter {
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
             "font-src 'self' https://fonts.gstatic.com; " +
             "img-src 'self' data: https: blob:; " +
-            "connect-src 'self' https://maps.googleapis.com https://translation.googleapis.com; " +
+            // Do not allow translation.googleapis.com from the browser.
+            // Translation is performed server-side (and is disabled when API key is missing).
+            "connect-src 'self' https://maps.googleapis.com; " +
             "frame-src 'self' https://maps.google.com; " +
             "object-src 'none'; " +
             "base-uri 'self'; " +
