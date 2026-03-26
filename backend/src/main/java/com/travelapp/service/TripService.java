@@ -100,7 +100,8 @@ public class TripService {
         Trip trip = TripMapper.toEntity(request);
 
         // Generate translations if not provided
-        if (trip.getTranslations() == null || trip.getTranslations().isEmpty()) {
+        if ((trip.getTranslations() == null || trip.getTranslations().isEmpty())
+                && translationService.isGoogleTranslateConfigured()) {
             trip.setTranslations(translationService.createTranslations(
                     request.getTitle(),
                     request.getDescription() != null ? request.getDescription() : ""));
@@ -129,7 +130,8 @@ public class TripService {
         TripMapper.updateEntity(trip, request);
 
         // Update translations if not provided in request
-        if (trip.getTranslations() == null || trip.getTranslations().isEmpty()) {
+        if ((trip.getTranslations() == null || trip.getTranslations().isEmpty())
+                && translationService.isGoogleTranslateConfigured()) {
             trip.setTranslations(translationService.createTranslations(
                     request.getTitle(),
                     request.getDescription() != null ? request.getDescription() : ""));

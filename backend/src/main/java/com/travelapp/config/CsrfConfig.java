@@ -11,10 +11,10 @@ import org.springframework.security.web.csrf.XorCsrfTokenRequestAttributeHandler
  * CSRF Configuration for JWT-based Stateless API
  * 
  * This configuration enables CSRF protection using Double Submit Cookie pattern.
- * CSRF token is sent as a cookie (read-only) and must be echoed back in X-CSRF-TOKEN header.
+ * CSRF token is sent as a cookie and must be echoed back in X-CSRF-TOKEN header.
  * This works with stateless JWT authentication because:
- * 1. CSRF cookie is HttpOnly and SameSite=Strict (secure)
- * 2. Frontend reads token from cookie and sends it in header
+ * 1. Frontend reads the cookie value (so cookie must NOT be HttpOnly)
+ * 2. Frontend echoes it into X-CSRF-TOKEN header
  * 3. Server validates that cookie and header tokens match
  */
 @Configuration
@@ -29,10 +29,9 @@ public class CsrfConfig {
         CookieCsrfTokenRepository repository = CookieCsrfTokenRepository.withHttpOnlyFalse();
         // Use setCookieCustomizer for Spring Security 6.1+ (replaces deprecated methods)
         repository.setCookieCustomizer(cookie -> {
-            cookie.httpOnly(true);
-            cookie.secure(true); // Only send over HTTPS in production
+            // Must be readable by JS (frontend uses document.cookie)
+            cookie.httpOnly(false);
             cookie.path("/");
-            cookie.sameSite("Strict");
         });
         repository.setHeaderName("X-CSRF-TOKEN");
         repository.setCookieName("XSRF-TOKEN");

@@ -27,11 +27,20 @@ public class TripTranslationService {
         this.translationService = translationService;
     }
 
+    public boolean isGoogleTranslateConfigured() {
+        return translationService.isGoogleTranslateConfigured();
+    }
+
     /**
      * Translate all trips that don't have translations yet
      */
     @Transactional
     public int translateAllTrips() {
+        if (!translationService.isGoogleTranslateConfigured()) {
+            logger.warn("Google Translate API key is not configured. Skipping translation jobs.");
+            return 0;
+        }
+
         List<Trip> trips = tripRepository.findAll();
         int translatedCount = 0;
         int skippedCount = 0;
@@ -85,6 +94,11 @@ public class TripTranslationService {
      */
     @Transactional
     public boolean translateTrip(Long tripId) {
+        if (!translationService.isGoogleTranslateConfigured()) {
+            logger.warn("Google Translate API key is not configured. Skipping translation job.");
+            return false;
+        }
+
         if (tripId == null) {
             return false;
         }
